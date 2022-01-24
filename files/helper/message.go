@@ -1,17 +1,10 @@
 package helper
 
-import (
-	"strings"
+import "strings"
 
-	"github.com/bwmarrin/discordgo"
-)
-
-type IncomingMessage struct {
-	*discordgo.MessageCreate
-}
-
-func (m *IncomingMessage) CheckPrefix() error {
-	if !strings.HasPrefix(m.Content, "&") {
+func CheckPrefix(msg string) error {
+	msg = strings.TrimSpace(msg)
+	if msg[0] != '&' {
 		return &WrongPrefixError{}
 	}
 	return nil
