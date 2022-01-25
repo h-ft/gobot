@@ -5,8 +5,10 @@ import (
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/sirupsen/logrus"
+	"main.go/files/entity"
 	"main.go/files/helper"
-	"main.go/files/request"
+	"main.go/files/request/covid"
+	"main.go/files/request/crypto"
 )
 
 // This function will be called (due to AddHandler above) every time a new
@@ -33,8 +35,18 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if len(command) == 1 {
 		switch command[0] {
 		case "btc", "bitcoin":
-			s.ChannelMessageSend(m.ChannelID, request.GetTokenByID(90))
+			s.ChannelMessageSend(m.ChannelID, crypto.GetTokenByID(90))
+			return
+		case "eth", "ethereum":
+			s.ChannelMessageSend(m.ChannelID, crypto.GetTokenByID(80))
+			return
+		case "help":
+			s.ChannelMessageSend(m.ChannelID, entity.Help)
 			return
 		}
+	}
+
+	if len(command) == 2 && command[0] == "covid" {
+		s.ChannelMessageSend(m.ChannelID, covid.GetCountryInfo(command[1]))
 	}
 }
