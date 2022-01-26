@@ -16,18 +16,18 @@ func GetTokenByID(id int) string {
 	logrus.Info(entity.CONST_API_COIN_TICKER + strconv.Itoa(id))
 	response, err := http.Get(entity.CONST_API_COIN_TICKER + strconv.Itoa(id))
 	if err != nil {
-		logrus.Error("[crypto.getTokenByID] Error from GET: ", err)
+		logrus.Error("[crypto.GetTokenByID] Error from GET: ", err)
 	}
 
 	responseData, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		logrus.Error("[crypto.getTokenByID] Error reading response: ", err)
+		logrus.Error("[crypto.GetTokenByID] Error reading response: ", err)
 	}
 
 	var arr []entity.CryptoResponse
 	err = json.Unmarshal(responseData, &arr)
 	if err != nil {
-		logrus.Error("[crypto.getTokenByID] Error unmarshaling: ", err)
+		logrus.Error("[crypto.GetTokenByID] Error unmarshaling: ", err)
 	}
 
 	res := arr[0]
@@ -42,7 +42,7 @@ func GetTokenByID(id int) string {
 	out := "```" + str.String() + "```"
 	logrus.Info("size of table " + strconv.Itoa(len(out)))
 	if len(out) > 2000 {
-		logrus.Error("[crypto.getTokenByID] Error: length limit exceeded")
+		logrus.Error("[crypto.GetTokenByID] Error: length limit exceeded")
 	}
 
 	return out
