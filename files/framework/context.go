@@ -1,9 +1,10 @@
-package entity
+package framework
 
 import (
 	"fmt"
 
 	"github.com/bwmarrin/discordgo"
+	"main.go/files/entity"
 )
 
 type Context struct {
@@ -16,38 +17,26 @@ type Context struct {
 	Args         []string
 
 	// dependency injection?
-	/*Conf       *Config
+	Conf       *entity.Config
 	CmdHandler *CommandHandler
 	Sessions   *SessionManager
-	Youtube    *Youtube*/
+	// Youtube    *Youtube
 }
 
 func NewContext(discord *discordgo.Session, guild *discordgo.Guild, textChannel *discordgo.Channel,
-	user *discordgo.User, message *discordgo.MessageCreate, conf *Config) *Context {
+	user *discordgo.User, message *discordgo.MessageCreate, cfg *entity.Config, cmdHandler *CommandHandler,
+	sessions *SessionManager) *Context {
 	ctx := new(Context)
 	ctx.Discord = discord
 	ctx.Guild = guild
 	ctx.TextChannel = textChannel
 	ctx.User = user
 	ctx.Message = message
-	return ctx
-}
-
-/*func NewContext(discord *discordgo.Session, guild *discordgo.Guild, textChannel *discordgo.Channel,
-	user *discordgo.User, message *discordgo.MessageCreate, conf *Config, cmdHandler *CommandHandler,
-	sessions *SessionManager, youtube *Youtube) *Context {
-	ctx := new(Context)
-	ctx.Discord = discord
-	ctx.Guild = guild
-	ctx.TextChannel = textChannel
-	ctx.User = user
-	ctx.Message = message
-	ctx.Conf = conf
+	ctx.Conf = cfg
 	ctx.CmdHandler = cmdHandler
 	ctx.Sessions = sessions
-	ctx.Youtube = youtube
 	return ctx
-}*/
+}
 
 func (ctx Context) Reply(content string) *discordgo.Message {
 	msg, err := ctx.Discord.ChannelMessageSend(ctx.TextChannel.ID, content)

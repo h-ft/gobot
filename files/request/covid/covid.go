@@ -11,7 +11,7 @@ import (
 )
 
 func GetCountryInfo(country string) string {
-	response, err := http.Get("https://disease.sh/v3/covid-19/countries/" + country + "?strict=true")
+	response, err := http.Get("https://disease.sh/v3/covid-19/countries/" + country + "?yesterday=true&strict=true")
 	if err != nil {
 		logrus.Error("[covid.GetCountryInfo] Error from GET: ", err)
 		return "Invalid country"
@@ -28,7 +28,7 @@ func GetCountryInfo(country string) string {
 		logrus.Error("[covid.GetCountryInfo] Error unmarshaling: ", err)
 	}
 
-	result := `Covid Information for ` + country + ` as of today: 
+	result := `Covid Information for ` + country + ` as of yesterday: 
 	
 Total cases			: ` + strconv.Itoa(resp.Cases) + `
 New cases today		: ` + strconv.Itoa(resp.TodayCases) + `
