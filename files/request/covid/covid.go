@@ -10,22 +10,24 @@ import (
 	"main.go/files/entity"
 )
 
-func GetCountryInfo(country string) string {
+func GetCountryInfo(country string) (string, error) {
 	response, err := http.Get("https://disease.sh/v3/covid-19/countries/" + country + "?yesterday=true&strict=true")
 	if err != nil {
 		logrus.Error("[covid.GetCountryInfo] Error from GET: ", err)
-		return "Invalid country"
+		return "", err
 	}
 
 	responseData, err := ioutil.ReadAll(response.Body)
 	if err != nil {
 		logrus.Error("[covid.GetCountryInfo] Error reading response: ", err)
+		return "", err
 	}
 
 	var resp entity.CovidResponse
 	err = json.Unmarshal(responseData, &resp)
 	if err != nil {
 		logrus.Error("[covid.GetCountryInfo] Error unmarshaling: ", err)
+		return "", err
 	}
 
 	result := `Covid Information for ` + country + ` as of yesterday: 
@@ -44,5 +46,5 @@ Critical			: ` + strconv.Itoa(resp.Critical) + `
 
 Data provided via disease.sh API. Sourced from Worldometers.`
 
-	return result
+	return result, nil
 }
